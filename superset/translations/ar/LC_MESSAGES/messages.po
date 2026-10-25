@@ -2298,7 +2298,7 @@ msgid "Bucket break points"
 msgstr "نقاط فواصل الفئات"
 
 msgid "Bulk select"
-msgstr "تحديد مجمع"
+msgstr "تحديد متعدد"
 
 msgid "Bulk tag"
 msgstr "وسم مجمّع"
@@ -6107,7 +6107,7 @@ msgid "Filter your charts"
 msgstr "تصفية مخططاتك"
 
 msgid "Filters"
-msgstr "عوامل تصفية"
+msgstr "عوامل التصفية"
 
 msgid "Filters and controls"
 msgstr "عوامل التصفية وعناصر التحكم"
@@ -7969,7 +7969,7 @@ msgid "Min/max (no outliers)"
 msgstr "الحد الأدنى/الأقصى (بدون قيم متطرفة)"
 
 msgid "Mine"
-msgstr "خاصتي"
+msgstr "الخاصة بي"
 
 msgid "Minimum"
 msgstr "الحد الأدنى"
@@ -11434,7 +11434,7 @@ msgid "Sorry, something went wrong. Please try again."
 msgstr "آسف، حدث خطأ ما. يرجى المحاولة مرة أخرى."
 
 msgid "Sorry, something went wrong. Try again later."
-msgstr "آسف، حدث خطأ ما. حاول مرة أخرى لاحقًا."
+msgstr "عذرًا، حدث خطأ ما. حاول مرة أخرى لاحقًا."
 
 #, python-format
 msgid "Sorry, there was an error saving this %s: %s"
