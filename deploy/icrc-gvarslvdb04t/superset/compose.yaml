@@ -1,0 +1,58 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+# Superset on gvarslvdb04t: Podman, host networking, metadata in the host's PostgreSQL 17.
+# nginx on the host terminates HTTPS and proxies to 127.0.0.1:8088 (web) and :5008 (MCP).
+name: superset
+
+x-superset: &superset
+  image: localhost/superset-icrc:6.1.0
+  network_mode: host
+  env_file: .env
+  volumes:
+    - ./superset_config.py:/app/pythonpath/superset_config.py:ro,z
+  restart: always
+  depends_on:
+    - redis
+
+services:
+  redis:
+    image: docker.io/library/redis:7.4.11
+    network_mode: host
+    command: ["redis-server", "--bind", "127.0.0.1", "--port", "6379", "--save", "", "--appendonly", "no"]
+    restart: always
+
+  superset:
+    <<: *superset
+    command: ["/app/docker/entrypoints/run-server.sh"]
+
+  superset-worker:
+    <<: *superset
+    command: ["celery", "--app=superset.tasks.celery_app:app", "worker", "--pool=prefork", "-O", "fair", "-c", "2"]
+    healthcheck:
+      disable: true
+
+  superset-mcp:
+    <<: *superset
+    command: ["superset", "mcp", "run", "--host", "127.0.0.1", "--port", "5008"]
+    healthcheck:
+      disable: true
+
+  superset-beat:
+    <<: *superset
+    command: ["celery", "--app=superset.tasks.celery_app:app", "beat", "--pidfile", "/tmp/celerybeat.pid", "-s", "/tmp/celerybeat-schedule"]
+    healthcheck:
+      disable: true
